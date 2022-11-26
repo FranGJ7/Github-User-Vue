@@ -1,6 +1,9 @@
+<!--Composition trabalha com setup dentro da tag script-->
 <script setup>
-import { reactive, ref, computed } from 'vue';
-
+import { reactive, ref, computed, onMounted, onUpdated, onUnmounted } from 'vue';
+import Repository from './Repository.vue';
+import UserInfo from './UserInfo.vue'
+import Form from './Form.vue';
 
 const searchInput = ref("")
 
@@ -13,9 +16,8 @@ const state = reactive({
     repos: []
 })
 
-async function fetchGithubUser(ev) {
-    ev.preventDefault()
-    const res = await fetch(`https://api.github.com/users/${searchInput.value}`)
+async function fetchGithubUser(searchInput) {
+    const res = await fetch(`https://api.github.com/users/${searchInput}`)
     const { login, name, bio, company, avatar_url } = await res.json()
 
     state.login = login
@@ -38,29 +40,33 @@ const reposCountMessage = computed(() => {
 
 
 
+onMounted(() => {
+    console.log("O componente foi montado")
+})
+
+onUpdated(() => {
+    console.log("O component foi atualizado")
+})
+
+
+onUnmounted(() => {
+    console.log("O componente foi desmontado")
+})
+
+
+
 </script>
 
 <template>
-    <h2>GitHub User Data</h2>
+    <slot></slot>
+    <Form @form-submit="fetchGithubUser" />
 
 
-     <form @submit="fetchGithubUser">
-        <input type="text" v-model="searchInput">
-        <button>Carregar usuário</button>
-
-     </form>
-
-
-
-
-<!--<input type="text" v-model="searchInput">
+    <!--<input type="text" v-model="searchInput">
     <button @click="fetchGithubUser">Carregar Usuário</button>-->
     <div v-if="state.login !== ''">
-        <img :src="state.avatar_url">
-        <strong>{{ state.login }} </strong>
-        <h1>{{ state.name }}</h1>
-        <h2>{{ state.company }}</h2>
-        <span>{{ state.bio }}</span>
+        <UserInfo :login="state.login" :name="state.name" :company="state.company" :avatar_url="state.avatar_url"
+            :bio="state.bio" />
     </div>
 
 
@@ -68,9 +74,8 @@ const reposCountMessage = computed(() => {
     <section v-if="state.repos.length > 0">
         <h2>{{ reposCountMessage }}</h2>
         <article v-for="repo of state.repos">
-            <h3>{{ repo.full_name }}</h3>
-            <p>{{ repo.description }}</p>
-            <a :href="repo.html_url" target="_blank">Ver no GitHub</a>
+            <Repository :full_name="repo.full_name" :description="repo.description" :html_url="repo.html_url" />
         </article>
     </section>
+    <slot name="footer"></slot>
 </template>

@@ -1,18 +1,15 @@
 <script setup>
-    //import OptionsApi from './components/OptionsApi.vue';
-import CompositionApiVue from './components/CompositionApi.vue';
-
-/* export default {
-     components:{
-      OptionsApi,              options forma diferente de composition substituido por setup dentro da tag script 
-      CompositionApiVue
-     }
-} */
 </script>
 
 <template>
-  <CompositionApiVue/>
-  <!-- <OptionsApi/> -->
+  <h1>Olá Mundo!</h1>
+  <nav>
+    <RouterLink to="/">Principal</RouterLink>
+    <RouterLink to="/search">Buscar</RouterLink>
+  </nav>
+  <RouterView>
+
+  </RouterView>
 </template>
 
 <style>
