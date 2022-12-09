@@ -2,21 +2,21 @@
 
 import { ref } from 'vue';
 import Profile from '../components/Profile.vue';
-
 const isOpen = ref(true)
 </script>
 
-
 <template>
-  <input type="checkbox" v-model="isOpen"> {{ isOpen }}
+  <div class="container">
+    <input type="checkbox" v-model="isOpen"> {{ isOpen }}
   <Profile v-if="isOpen">
     <h1> GitHub User Data</h1>
-    <template v-slot:footer>
-      <footer>
-        Desenvolvido por Fran
-      </footer>
-    </template>
   </Profile>
+</div> 
 
-  <!-- <OptionsApi/> -->
 </template>
+<style>
+  .container{
+    margin-left: 10%;
+    margin-right: 10%;
+  }
+</style>

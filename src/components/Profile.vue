@@ -19,7 +19,6 @@ const state = reactive({
 async function fetchGithubUser(searchInput) {
     const res = await fetch(`https://api.github.com/users/${searchInput}`)
     const { login, name, bio, company, avatar_url } = await res.json()
-
     state.login = login
     state.name = name
     state.bio = bio
@@ -35,7 +34,7 @@ async function fetchUserRepositories(username) {
 }
 
 const reposCountMessage = computed(() => {
-    return state.repos.length > 0 ? `${state.name} possui ${state.repos.length} repositórios públicos` : `${state.name} não possui repositório público `
+    return state.repos.length > 0 ? `Repositórios públicos:${state.repos.length}` : `Repositórios públicos: 0`
 })
 
 
@@ -53,29 +52,34 @@ onUnmounted(() => {
     console.log("O componente foi desmontado")
 })
 
-
-
 </script>
 
 <template>
-    <slot></slot>
+    
     <Form @form-submit="fetchGithubUser" />
-
-
-    <!--<input type="text" v-model="searchInput">
-    <button @click="fetchGithubUser">Carregar Usuário</button>-->
     <div v-if="state.login !== ''">
-        <UserInfo :login="state.login" :name="state.name" :company="state.company" :avatar_url="state.avatar_url"
-            :bio="state.bio" />
+        <UserInfo :name="state.name" :company="state.company" :avatar_url="state.avatar_url"
+            :bio="state.bio" /> 
     </div>
-
-
-
+   
+    <div v-if="(state.login == '')">
+       
+       <p>Usuário não encontrado.</p>
+    </div>
+    
     <section v-if="state.repos.length > 0">
-        <h2>{{ reposCountMessage }}</h2>
+        <p class="repos">{{ reposCountMessage }}</p>
         <article v-for="repo of state.repos">
-            <Repository :full_name="repo.full_name" :description="repo.description" :html_url="repo.html_url" />
+            <Repository :full_name="repo.full_name" :description="repo.description" :html_url="repo.html_url" :reposCountMessage="reposCountMessage" />
         </article>
     </section>
     <slot name="footer"></slot>
 </template>
+
+<style>
+  .repos{
+    font-family: 'Hepta Slab', serif;
+    font-size: 12px;
+    text-align: center;
+  }
+</style>

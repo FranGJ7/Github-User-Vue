@@ -1,24 +1,32 @@
 <script setup>
+import NavbarVue from './components/Navbar.vue';
+import FooterVue from './components/Footer.vue';
+
 </script>
-
 <template>
-  <h1>Olá Mundo!</h1>
+   <div class="mainContainer">
   <nav>
-    <RouterLink to="/">Principal</RouterLink>
-    <RouterLink to="/search">Buscar</RouterLink>
+    <NavbarVue/>
   </nav>
-  <RouterView>
-
-  </RouterView>
+  <RouterView/>
+  <footer>
+  <FooterVue/>
+ </footer>
+</div>
 </template>
 
 <style>
-#app {
-  display: grid;
-  place-content: center;
-  min-height: 100vh;
+ @import url('https://fonts.googleapis.com/css2?family=Hepta+Slab:wght@300&display=swap');
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
-button{
-  font-size: 2rem;
+body,html{
+    background-color: black;
+    color: white;
+}
+.mainContainer{
+  height: 100vh;
 }
 </style>
